@@ -26,6 +26,7 @@ public:
         for (size_t i = 0; i < 3; i++)
             body[i] = arr[i];
     }
+    ~Vector() {}
     Vector operator=(Vector& v) {
         for (size_t i = 0; i < 3; i++)
             body[i] = v[i];
