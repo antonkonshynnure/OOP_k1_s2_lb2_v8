@@ -1,0 +1,121 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+#include <math.h>
+using namespace std;
+class Vector
+{
+private:
+    float body[3];
+    float mod() {
+        float s = 0.0;
+        for (size_t i = 0; i < 3; i++)
+            s += body[i] * body[i];
+        return sqrtf(s);
+    }
+public:
+    Vector() {}
+    Vector(Vector& v) {
+        for (size_t i = 0; i < 3; i++)
+            body[i] = v[i];
+    }
+    Vector(Vector&& v) {
+        for (size_t i = 0; i < 3; i++)
+            body[i] = v[i];
+    }
+    Vector(float* arr) {
+        for (size_t i = 0; i < 3; i++)
+            body[i] = arr[i];
+    }
+    Vector operator=(Vector& v) {
+        for (size_t i = 0; i < 3; i++)
+            body[i] = v[i];
+        return *this;
+    }
+    Vector operator=(Vector&& v) {
+        for (size_t i = 0; i < 3; i++)
+            body[i] = v[i];
+        return *this;
+    }
+    float operator[](int i) {
+        return body[i];
+    }
+    Vector operator+(Vector v) {
+        Vector res;
+        for (size_t i = 0; i < 3; i++)
+            res.body[i] = body[i] + v[i];
+        return res;
+    }
+    Vector operator-(Vector v) {
+        Vector res;
+        for (size_t i = 0; i < 3; i++)
+            res.body[i] = body[i] - v[i];
+        return res;
+    }
+    Vector operator*(float r) {
+        Vector res;
+        for (size_t i = 0; i < 3; i++)
+            res.body[i] = r * body[i];
+        return res;
+    }
+    float operator*(Vector v) {
+        float s = 0.0;
+        for (size_t i = 0; i < 3; i++)
+            s += body[i] * v.body[i];
+        return s;
+    }
+    bool operator==(Vector v) {
+        bool res = true;
+        for (size_t i = 0; i < 3; i++)
+            res = res && (body[i] == v.body[i]);
+        return res;
+    }
+    bool operator!=(Vector v) {
+        return !((*this) == v);
+    }
+    bool operator>(Vector v) {
+        return mod() > v.mod();
+    }
+    bool operator<(Vector v) {
+        return mod() < v.mod();
+    }
+    void operator>>(FILE* f) {
+        fprintf(f, "(");
+        for (size_t i = 0; i < 3; i++)
+            fprintf(f, "%f ", body[i]);
+        fprintf(f, ")\n");
+    }
+    void operator<<(FILE* f) {
+        for (size_t i = 0; i < 3; i++)
+            fscanf(f, "%f", &body[i]);
+    }
+};
+int main()
+{
+    Vector v0;
+    Vector v1;
+    Vector v2;
+    v0 << stdin;
+    v1 << stdin;
+    v2 << stdin;
+    v0 >> stdout;
+    v1 >> stdout;
+    v2 >> stdout;
+    Vector v3 = v1 + v2;
+    Vector v4 = v1 - v2;
+    Vector v5 = v4 * (2.0);
+    Vector v6(v5);
+    v3 >> stdout;
+    v4 >> stdout;
+    v5 >> stdout;
+    float arr[3] = { 1.1, 2.2, 3.4};
+    Vector v7(arr);
+    cout << v7[2] << endl;
+    cout << v6[2] << endl;
+    cout << v1 * v2 << endl;
+    cout << (v1 == v1) << endl;
+    cout << (v1 != v2) << endl;
+    cout << v1.mod() << endl;
+    cout << v2.mod() << endl;
+    cout << (v1 > v2) << endl;
+    cout << (v2 < v1) << endl;
+}
